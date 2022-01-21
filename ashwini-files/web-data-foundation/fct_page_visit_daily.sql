@@ -1,4 +1,4 @@
---insert into fct_page_visit_daily ()
+--insert into fct_page_visit_daily () 
 
 with pages as
 (     select id page_visit_id 
@@ -20,7 +20,7 @@ with pages as
         , tracking_utm_medium utm_medium
         , tracking_utm_term utm_term
 from `datascience-222717.confluentio_segment_prod.pages` pages
--- where timestamp >= '' and timestamp <= ''  -- how to get the extract_date
+-- where timestamp >= DATE_ADD(DATE current_date, INTERVAL -2 DAY) and timestamp <=  DATE_ADD(DATE current_date, INTERVAL -1 DAY)  -- how to get the extract_date
 )
 select page_visit_id 
         , page_url 
@@ -37,6 +37,8 @@ select page_visit_id
         , utm_term
         , (case when rnk1_isentrance = 1 then 'True' else 'False' end) is_entrance
         , (case when rnk2_isexit = 1     then 'True' else 'False' end) is_exit
-        , (case when  rnk1_isentrance = 1 and rnk2_isexit = 1 then 'True' else 'False' end) is_bounce     
+        , (case when  rnk1_isentrance = 1 and rnk2_isexit = 1 then 'True' else 'False' end) is_bounce  
+  --      , DATE_ADD(DATE current_date, INTERVAL -2 DAY)  extract_date
 from pages
+
 
