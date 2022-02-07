@@ -36,6 +36,6 @@ select page_visit_id
         , (case when rnk1_isentrance = 1 then 'True' else 'False' end) is_entrance
         , (case when rnk2_isexit = 1     then 'True' else 'False' end) is_exit
         , (case when  rnk1_isentrance = 1 and rnk2_isexit = 1 then 'True' else 'False' end) is_bounce  
-  --    ,  TIMESTAMP('{{next_execution_date.isoformat()}}') as extract_date
+        ,  TIMESTAMP('{{next_execution_date.isoformat()}}') as extract_date
 from pages
 
