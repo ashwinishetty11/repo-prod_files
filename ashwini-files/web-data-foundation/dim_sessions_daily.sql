@@ -1,16 +1,16 @@
 -- daily load sessions table
 
 with pages as (   
-      select  s_id session_id
+       select  s_id session_id
                  , anonymous_id visitor_id  
-               --, context_locale language  
+                 , string_agg(context_locale) language  
                  , MIN(timestamp) visit_start_time
                  , MAX(timestamp) visit_end_time
                  , date_diff(MAX(timestamp), MIN(timestamp), MINUTE) tot_session_time
                  , count(url) cnt_page_views
     from confluentio_segment_prod.pages pages
     where timestamp >=  '2021-12-01'   --DATE('{{ next_execution_date.isoformat() }}')
-    group by 1,2  --, 3
+    group by 1,2  
 ) 
 
 ,  inquiries as (
