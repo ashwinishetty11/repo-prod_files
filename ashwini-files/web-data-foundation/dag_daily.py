@@ -15,7 +15,7 @@ from workflows import config  # noqa
 DAG_ID = Path(__file__).parent.name
 default_dag_args = {
     "owner": "ashetty",
-    "start_date": datetime.datetime(2021, 6, 22),
+    "start_date": datetime(2021, 6, 22),
     "on_failure_callback": common.slack_notify_for_failure,
 }
 
@@ -48,7 +48,8 @@ with DAG(DAG_ID, schedule_interval="0 8 * * *", default_args=default_dag_args) a
         )
 
     task_group_1 = DummyOperator(task_id="task_group_1")
-
+    
+    cust_tbl_tasks = []
     for c_tble in TBLS_NO_PARTITION:
         cust_tbl_tasks.append(
             BigQueryOperator(
