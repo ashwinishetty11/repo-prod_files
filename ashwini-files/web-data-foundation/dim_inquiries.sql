@@ -21,7 +21,8 @@ select    i.campaign_member_id inquiry_id
         , i.campaign_type form_id
         , i.lead_id 
         , i.contact_id
-        , i.campaign_name camaign_type
+        , sfdc_campaign_type
+        , i.campaign_name camaign_name
         , i.tactic 
         , i.tactic_grouping 
         , i.utm_campaign
