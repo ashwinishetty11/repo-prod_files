@@ -34,7 +34,7 @@ select    i.campaign_member_id inquiry_id
         , ici.channel_detail
         , ici.channel_aggregate
        
-        , cm.FCRM__FCR_Net_New_Lead__c is_new_lead 
+   --   , cm.FCRM__FCR_Net_New_Lead__c is_new_lead 
         , i.new_lead_or_contact 
         , cm.fcrm__fcr_opportunity__c opp_id
 
