@@ -1,4 +1,3 @@
-
 CREATE OR REPLACE TABLE `data-sandbox-123.Workspace_Ashwini.sdr_cloud_signup_spiff_sdr_activities` AS
 -- will change the name of the table later
 
@@ -89,4 +88,3 @@ SELECT a.*
 FROM activity a
 left join lead_contact b
     on a.whoid = b.id
-    
