@@ -1,4 +1,4 @@
---CREATE OR REPLACE TABLE `data-sandbox-123.Workspace_Ashwini.sdr_cloud_signup_spiff_sdr_assisted_signups` AS
+--CREATE OR REPLACE TABLE sdr_cloud_signup_spiff.rpt_sdr_assisted_signups_v2  AS
 
 WITH signup_leads AS (
   SELECT *
