@@ -7,4 +7,4 @@ OPTIONS (
   format = 'GOOGLE_SHEETS',
   uris = ['https://docs.google.com/spreadsheets/d/11s_o0ePO-HvJo8DPc5AmGrbGTscrM3A4fo7YVlN0RVo/edit#gid=0'],
   skip_leading_rows = 1
-);
+)
