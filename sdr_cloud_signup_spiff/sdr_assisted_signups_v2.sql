@@ -1,4 +1,11 @@
---CREATE OR REPLACE TABLE sdr_cloud_signup_spiff.rpt_sdr_assisted_signups_v2  AS
+-- This code for sdr assitsted signups is very similar to the one present in production, except for the fact that here, we are using the excel input
+-- sdr-to-manager mapping of this Quarter(provided by Ali). 
+-- This will serve to the rpt needs of the first 3 views of the Dash as requested by Ali and also help us avoid the heavy self-joins on user_daily table.
+-- However, if we were to have a trend of the sdr-assisted-cloud-signups and have a filter for manager_name across a time range of more a one quarter,
+-- we will have to include a history table(although this request is not presently there)
+
+
+--CREATE OR REPLACE TABLE sdr_cloud_signup_spiff.rpt_sdr_assisted_signups_v2  AS -- will make changes to table name later
 
 WITH signup_leads AS (
   SELECT *
@@ -7,27 +14,25 @@ WITH signup_leads AS (
 
 activity as (
     SELECT *
-    FROM `data-sandbox-123.Workspace_Ashwini.sdr_cloud_signup_spiff_sdr_activities`
-    --FROM sdr_cloud_signup_spiff.sdr_activities
+    FROM `data-sandbox-123.Workspace_Ashwini.sdr_cloud_signup_spiff_sdr_activities` -- activities_v2 table 
 )
 
- , sdrs_assisted_signup as (
-select s.org_id
-    ,org_name
-    , signed_up_at
-    , a.task_owner_id
-    , coalesce(lead_id, contact_id) as lead_or_contact_id
-    , activitydate
-    , user_name
-    , a.manager_name
-    , a.user_id -- added by ashwini 02/16/22
-    , a.is_csdr
-    ,row_number() over ( partition by org_id order by activitydate ) as activity_rnk
-FROM signup_leads s
-    left join activity a  ON coalesce(a.lead_id, a.contact_id) = s.lead_or_contact_id 
-where (  (date_diff(date(signed_up_at), date(a.activitydate), day) <= 30  and signed_up_at > a.activitydate and lower(a.subject) like '%email%')
-      or (date_diff(date(signed_up_at), date(a.activitydate), day) <= 15  and signed_up_at > a.activitydate and a.subject like '%[Call]%'))
-  
+, sdrs_assisted_signup as (
+    select s.org_id
+        ,org_name
+        , signed_up_at
+        , a.task_owner_id
+        , coalesce(lead_id, contact_id) as lead_or_contact_id
+        , activitydate
+        , user_name
+        , a.manager_name
+        , a.user_id -- added by ashwini 02/16/22
+        , a.is_csdr
+        ,row_number() over ( partition by org_id order by activitydate ) as activity_rnk
+    FROM signup_leads s
+        left join activity a  ON coalesce(a.lead_id, a.contact_id) = s.lead_or_contact_id 
+    where ((date_diff(date(signed_up_at), date(a.activitydate), day) <= 30  and signed_up_at > a.activitydate and lower(a.subject) like '%email%')
+        or (date_diff(date(signed_up_at), date(a.activitydate), day) <= 15  and signed_up_at > a.activitydate and a.subject like '%[Call]%')) 
   )
 
 , promo_signup_ordered as (
@@ -42,8 +47,8 @@ where (  (date_diff(date(signed_up_at), date(a.activitydate), day) <= 30  and si
     from datascience-222717.rpt_c360.cc_promo_code a
         inner join datascience-222717.fnd_sfdc.user_daily b on a.created_by_email = b.email
                                                               and date(a.promo_created_date) = date(_snapshot_ts)
-         left join `data-sandbox-123..Workspace_Ashwini.lkup_map_sdr_manager_FY2022Q1` lkup on b.name = lkup.SDR_Name 
-                                                                                --b.id = lkup.id    -- added by ashwini                                                 
+         left join `data-sandbox-123.Workspace_Ashwini.lkup_map_sdr_manager_FY2022Q1` lkup on b.name = lkup.sdr_name 
+                                                                                --b.id = lkup.sdr_id    -- added by ashwini                                                 
     where promo_code_claim_status = "Claimed"
         and (a.promo_code_id != '4048' and a.promo_code != 'FREETRIAL400')
         and job_role__c IN ('Inbound SDR', 'Outbound SDR', 'cSDR')
@@ -100,7 +105,6 @@ org_region_info as (
         on c.sfdc_account_id = acc.id
 )
 
-
 select a.*
     ,sfdc_account_theater
     ,sfdc_account_region
@@ -115,8 +119,6 @@ select a.*
           else manager_name 
          end as manager_name_adj
 from sdr_assisted_signups a
-left join signup_order b
-    on a.org_id = b.org_id
-left join org_region_info ori
-    on a.org_id = ori.org_id
+    left join signup_order b on a.org_id = b.org_id
+    left join org_region_info ori on a.org_id = ori.org_id
 ;
