@@ -1,6 +1,7 @@
- 
---Activity
+
 CREATE OR REPLACE TABLE `data-sandbox-123.Workspace_Ashwini.sdr_cloud_signup_spiff_sdr_activities` AS
+-- will change the name of the table later
+
 WITH task_all as (
     select  subject,
          whoid,
@@ -67,17 +68,16 @@ WITH task_all as (
         , case when date(activitydate) between "2020-11-15" and "2022-02-01"
                 and u.id in ("0053a00000PnEpTAAV", "0053a00000PBO9vAAH", "0053a00000LAmiAAAT")
             then "cSDR" else u.job_role__c end as task_owner_role
-        , u.id user_id  -- added by ashwini - 16Feb'22
+        , u.id user_id              -- added by ashwini - 16Feb'22
         , u.name as user_name
-        --, manager_name
-        , lkup.manager_Name manager_name
+        , lkup.manager_name 
     FROM task_all t
         left join datascience-222717.fnd_sfdc.user_daily u  on t.ownerid = u.id 
                                                               and date(activitydate) =  date(u._snapshot_ts)
         left join datascience-222717.fnd_sfdc.lead l        on l.converted_contact_id = whoid
         left join datascience-222717.fnd_sfdc.lead l2       on l2.id = whoid
         left join datascience-222717.fnd_sfdc.contact c     on c.id = whoid
-        left join `data-sandbox-123.Workspace_Ashwini.lkup_map_sdr_manager_FY2022Q1` lkup on u.name = lkup.SDR_Name -- u.id = lkup.id
+        left join `data-sandbox-123.Workspace_Ashwini.lkup_map_sdr_manager_FY2022Q1` lkup on u.name = lkup.sdr_name --on u.id = lkup.sdr_id
     WHERE u.job_role__c IN ('Inbound SDR', 'Outbound SDR', "cSDR") 
 )
 
