@@ -1,0 +1,987 @@
+select week, sum(leads_or_contacts_touched)
+from rpt_marketing.paid_media_performance_v2 
+where channel_type = 'sem' and week = '2022-01-16'
+group by 1
+
+select  sum(leads_or_contacts_touched)
+from `data-sandbox-123.Workspace_Ashwini.paid_media_performance_v2_feb11`
+where channel_type = 'sem' and week = '2022-01-16'
+ 
+
+select * from `data-sandbox-123.Workspace_Ashwini.paid_media_summary_feb07` 
+where channel_type = 'sem' and week = '2022-01-16'
+limit 100 
+
+
+--create or replace table Workspace_Ashwini.rpt_leads_pipeline_inbound_lead_funnel_feb14 as
+select * from  `datascience-222717.rpt_leads_pipeline.inbound_lead_funnel`
+
+select * from `datascience-222717.rpt_marketing.inquiry` 
+--select * from `datascience-222717.rpt_marketing.paid_media_performance_v2` where channel_type = 'sem' 
+
+select * from `datascience-222717.rpt_marketing.paid_media_summary` 
+where channel_type = 'sem' and week = '2022-01-16'
+---------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------
+select distinct channel
+from `data-sandbox-123.Workspace_Ashwini.paid_media_summary_feb10` 
+where channel_type = 'sem'  and week = '2022-01-16'
+
+select channel, count(*)
+from `data-sandbox-123.Workspace_Ashwini.paid_media_summary_feb10` 
+where channel_type = 'sem'  and week = '2022-01-16'
+group by 1
+
+select channel,day, count(*)
+from `data-sandbox-123.Workspace_Ashwini.paid_media_summary_feb10` 
+where channel_type = 'sem'  and week = '2022-01-16'
+group by 1,2
+order by 2,1
+
+
+select * from `data-sandbox-123.Workspace_Ashwini.inbound_lead_funnel_feb10`  -- 
+where mapping_channel_type = 'sem'
+ 
+select * 
+from `data-sandbox-123.Workspace_Ashwini.inbound_lead_funnel_feb10` 
+where mapping_channel_type = 'sem' 
+    and inquiry_date >= '2022-01-16'and inquiry_date <= '2022-01-22'
+596
+
+select count(inquiry_date), sum(leads_or_contacts_created) 
+from `data-sandbox-123.Workspace_Ashwini.inbound_lead_funnel_feb10` 
+where mapping_channel_type = 'sem' 
+    and inquiry_date >= '2022-01-16'and inquiry_date <= '2022-01-22'
+
+select mapping_channel, mapping_channel_type, inquiry_date, count(*), sum(leads_or_contacts_created) 
+from `data-sandbox-123.Workspace_Ashwini.inbound_lead_funnel_feb10` 
+where mapping_channel_type = 'sem' 
+    and inquiry_date >= '2022-01-16'and inquiry_date <= '2022-01-22'
+group by 1 ,2 ,3
+
+select mapping_channel, mapping_channel_type, utm_campaign, inquiry_date, count(*), sum(leads_or_contacts_created) 
+from `data-sandbox-123.Workspace_Ashwini.inbound_lead_funnel_feb10` 
+where mapping_channel_type = 'sem' 
+    and inquiry_date >= '2022-01-16'and inquiry_date <= '2022-01-22'
+group by 1 ,2 ,3,4
+order by 4,3,2,1
+
+
+select --t1.channel, t1.channel_type --,t1.adgroup
+         --   , t1.day, count(*),
+             sum(leads_or_contacts_created) sum_leads_created
+from ( 
+    select t1.channel, t1.channel_type,t1.adgroup, t1.day,leads_or_contacts_created-- count(*), sum(leads_or_contacts_created) 
+    from `data-sandbox-123.Workspace_Ashwini.paid_media_summary_feb10`  t1
+        left join `data-sandbox-123.Workspace_Ashwini.inbound_lead_funnel_feb10`  t3 
+                                on    t1.day = t3.inquiry_date 
+                                  and lower(t1.channel_type) = lower(t3.mapping_channel_type) 
+                                  and lower(t1.channel) = lower(t3.mapping_channel) 
+                                  and t1.adgroup = t3.utm_campaign
+) t1 
+where channel_type = 'sem'
+    and day >= '2022-01-16'and day <= '2022-01-22'
+group by 1,2,3
+order by 3,2,1
+
+select inquiry_date,mapping_channel_type,mapping_channel, utm_campaign, leads_or_contacts_created  
+from   `data-sandbox-123.Workspace_Ashwini.inbound_lead_funnel_feb10` 
+where inquiry_date = '2022-01-19' and mapping_channel_type = 'sem' and mapping_channel = 'bing'
+
+
+SELECT * FROM `data-sandbox-123.Workspace_Ashwini.rpt_leads_pipeline_inbound_lead_funnel_feb11` 
+where inquiry_created_date_utc = '2022-01-19'
+   -- inquiry_created_date_utc >= '2022-01-16'and  inquiry_created_date_utc <= '2022-01-22'
+
+SELECT * FROM `data-sandbox-123.Workspace_Ashwini.rpt_leads_pipeline_inbound_lead_funnel_feb11` 
+where  inq_channel_agg = 'Paid Media'
+        and inquiry_created_date_utc = '2022-01-19' 
+   -- inquiry_created_date_utc >= '2022-01-16'and  inquiry_created_date_utc <= '2022-01-22'
+order by 2
+
+
+SELECT inq_channel_agg,count(*)
+FROM `data-sandbox-123.Workspace_Ashwini.rpt_leads_pipeline_inbound_lead_funnel_feb11` 
+where  inq_channel_agg = 'Paid Media' and
+       -- and inquiry_created_date_utc = '2022-01-19' 
+        inquiry_created_date_utc >= '2022-01-16'and  inquiry_created_date_utc <= '2022-01-22'
+group by 1 order by 1
+
+SELECT inq_channel_agg,count(*)
+FROM `data-sandbox-123.Workspace_Ashwini.rpt_leads_pipeline_inbound_lead_funnel_feb11` 
+where  --inq_channel_agg = 'Paid Media' and
+       -- and inquiry_created_date_utc = '2022-01-19' 
+        inquiry_created_date_utc >= '2022-01-16'and  inquiry_created_date_utc <= '2022-01-22'
+
+SELECT campaign_member_id,inq_channel_agg,*
+FROM `data-sandbox-123.Workspace_Ashwini.rpt_leads_pipeline_inbound_lead_funnel_feb11` 
+where  inq_channel_agg = 'Paid Media' and
+          inquiry_created_date_utc = '2022-01-19' 
+       -- inquiry_created_date_utc >= '2022-01-16'and  inquiry_created_date_utc <= '2022-01-22'
+order by 1
+
+--***
+--- 
+select * from `data-sandbox-123.Workspace_Ashwini.inquiry_feb11`
+where created_ts >= '2022-01-16' and created_ts <= '2022-01-22'
+
+
+select region, count(*)
+from `data-sandbox-123.Workspace_Ashwini.inquiry_feb11` i 
+where created_ts >= '2022-01-16' and created_ts <= '2022-01-22'
+group by 1
+order by 1
+
+
+---------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------
+
+
+
+--CREATE TABLE `data-sandbox-123.Workspace_Ashwini.fnd_sfdc_campaign_member_feb15` as
+select * from `datascience-222717.fnd_sfdc.campaign_member`
+
+        select inq_channel_agg,* from  `data-sandbox-123.Workspace_Ashwini.rpt_leads_pipeline_inbound_lead_funnel_feb11` 
+        where campaign_member_id = '00v3a00001IxJRmAAN'
+        and    inquiry_created_date_utc = '2022-01-19' 
+
+
+select  cm.utm_campaign__c as utm_campaign,utm_medium__c,contactid ,*
+from  `datascience-222717.fnd_sfdc.campaign_member`   cm
+where id = '00v3a00001IxJRmAAN' and
+    date(createddate) = '2022-01-19'
+
+ 
+select  cm.utm_campaign__c as utm_campaign,utm_medium__c,c.campaign_type_v2__c, *
+from  `datascience-222717.fnd_sfdc.campaign` c
+      JOIN `datascience-222717.fnd_sfdc.campaign_member` cm ON c.id = cm.campaignid
+where cm.id = '00v3a00001IxJRmAAN' and
+    date(cm.createddate) = '2022-01-19'   
+
+ select utm_campaign,utm_medium,sfdc_campaign_type, sfdc_lead_id, *
+from `datascience-222717.rpt_new_pg_attribution.new_pg_attribution_step1` cm
+where inquiry_id = '00v3a00001IxJRmAAN' 
+
+SELECT interaction_time AS visit_time,
+              sfdc_lead_id,
+              campaign_name,
+              source,
+              medium,
+              has_devx_content,
+              CASE WHEN channel = 'gmail' and marketing_group = 'Paid Media' then 'Paid Email'
+                    WHEN channel = 'Search Engine Marketing' then 'Paid Search'
+              ELSE channel END AS channel,
+              marketing_group,
+              tactic
+      FROM `datascience-222717.rpt_attribution.touchpoints_step2`
+      WHERE (sfdc_campaign_type in ('Email', 'digital touch') OR channel = 'Email')
+      and sfdc_lead_id = '00Q3a00000viJDuEAM'
+      and date(interaction_time) = '2022-01-19'
+
+select * from 00Q3a00000viJDuEAM
+
+---------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------
+WITH 
+kafka_ind_sessions_exclude as (
+select distinct
+id from 
+fnd_sfdc.campaign where parentid = '7013a000002Do9OAAS' and id <> '7013a000002Do9OAAS'
+)
+,exclusions as (
+  select cm.id
+   FROM `datascience-222717.fnd_sfdc.campaign` c
+      JOIN `datascience-222717.fnd_sfdc.campaign_member` cm ON c.id = cm.campaignid
+      JOIN fnd_sfdc.lead l ON l.converted_contact_id = cm.contactid
+      JOIN rpt_attribution.marketo_to_sfdc_map map ON l.id = map.sfdc_lead_id
+    WHERE (cm.leadid IS NULL and c.id not in (select distinct id from kafka_ind_sessions_exclude) )
+          and cm.id = '00v3a00001IxOPsAAN'       --'00v3a00001IxJRmAAN'--00v3a00001IxOPsAAN' --'00Q3a00000viJDuEAM'
+          and date(cm.createddate) = '2022-01-19'
+    union all
+    select cm.id
+    FROM `datascience-222717.fnd_sfdc.campaign` c
+      JOIN `datascience-222717.fnd_sfdc.campaign_member` cm ON c.id = cm.campaignid
+      JOIN rpt_attribution.marketo_to_sfdc_map map ON cm.leadid = map.sfdc_lead_id
+     WHERE ( cm.leadid IS NOT NULL and c.id not in (select distinct id from kafka_ind_sessions_exclude) )
+          and cm.id = '00v3a00001IxOPsAAN' 
+          and date(cm.createddate) = '2022-01-19'
+    )
+-- Add new campaign member as pure contact
+ , contact_opportunity_addition AS (
+   SELECT
+     a.campaign_id,
+     a.inquiry_id,
+     a.utm_campaign,
+     a.utm_medium,
+     a.utm_source,
+     a.campaign_name,
+     a.campaign_team,
+     a.campaign_theater,
+     a.interaction_time,
+     a.interaction_date,
+     a.sfdc_lead_id,
+     '' as contact_id,
+     a.sfdc_lead_id as lead_or_contact_id,
+     a.lead_created_date,
+     d.opportunityid AS opportunity_id,
+     a.account_id,
+     a.action,
+     a.sfdc_campaign_type,
+     a.sfdc_campaign_function,
+     a.lead,
+     CASE WHEN d.opportunityid IS NOT NULL THEN 1 ELSE 0 END AS opp,
+     'lead' as origin
+   FROM rpt_new_pg_attribution.new_pg_attribution_step1 a
+    LEFT JOIN fnd_sfdc.lead b ON a.sfdc_lead_id = b.id
+    LEFT JOIN fnd_sfdc.opportunity_contact_role d ON b.converted_contact_id = d.contactid
+   WHERE a.opportunity_id IS NULL
+     and a.inquiry_id =   '00v3a00001IxOPsAAN'
+
+   UNION ALL
+   SELECT
+     a.campaign_id,
+     a.inquiry_id,
+     a.utm_campaign,
+     a.utm_medium,
+     a.utm_source,
+     a.campaign_name,
+     a.campaign_team,
+     a.campaign_theater,
+     a.interaction_time,
+     a.interaction_date,
+     a.sfdc_lead_id,
+     '' as contact_id,
+     a.sfdc_lead_id as lead_or_contact_id,
+     a.lead_created_date,
+     a.opportunity_id,
+     a.account_id,
+     a.action,
+     a.sfdc_campaign_type,
+     a.sfdc_campaign_function,
+     a.lead,
+     a.opp,
+     'lead' as origin
+   FROM rpt_new_pg_attribution.new_pg_attribution_step1 a
+      WHERE a.opportunity_id IS NOT NULL
+         and a.inquiry_id = '00v3a00001IxOPsAAN'--'00v3a00001IxJRmAAN'
+ UNION ALL
+    SELECT DISTINCT
+          c.id AS campaign_id,
+          cm.id AS inquiry_id,
+          cm.utm_campaign__c as utm_campaign,
+          cm.utm_medium__c as utm_medium,
+          cm.utm_source__c as utm_source,
+          c.name AS campaign_name,
+          c.team__c AS campaign_team,
+          c.theater__c AS campaign_theater,
+          -- when the difference between member createddate and associated date > 1 day
+          -- then use the associated date else use createddate.
+          -- TODO : change to use member associated date after all dates change to pst
+          TIMESTAMP_TRUNC(case 
+            when abs(date_diff(date(cm.createddate), date(cm.member_associated_date__c), day)) > 1 
+                or c.campaign_type_v2__c = 'PG Prospecting Days' then member_associated_date__c 
+            else cm.createddate end, MINUTE)  as interaction_time,
+          cast(case 
+            when abs(date_diff(date(cm.createddate), date(cm.member_associated_date__c), day)) > 1 
+              or c.campaign_type_v2__c = 'PG Prospecting Days'  then member_associated_date__c 
+            else cm.createddate end as DATE) as interaction_date,
+          '' AS sfdc_lead_id,
+          cm.contactid AS contact_id,
+          cm.contactid AS lead_or_contact_Id,
+          co.createddate AS lead_created_date,
+          d.opportunityid AS opportunity_id,
+          e.acct_id AS account_id,
+          cm.status AS action,
+          c.campaign_type_v2__c AS sfdc_campaign_type,
+          c.function__c AS sfdc_campaign_function,
+          0 as lead,
+          1 as opp,
+          'contact' as origin
+    FROM `datascience-222717.fnd_sfdc.campaign` c
+      JOIN `datascience-222717.fnd_sfdc.campaign_member` cm ON c.id = cm.campaignid
+      JOIN fnd_sfdc.opportunity_contact_role d ON cm.contactid = d.contactid
+      JOIN fnd_sfdc.opportunity e ON d. opportunityid = e.id
+      LEFT JOIN fnd_sfdc.contact co on co.id = cm.contactid
+      WHERE (cm.id NOT IN (SELECT id FROM exclusions) AND
+            (cm.contactid IS NOT NULL OR cm.leadid IS NOT NULL) AND 
+            c.id not in (select distinct id from kafka_ind_sessions_exclude) )
+            and  cm.id = '00v3a00001IxOPsAAN'
+
+)
+ ,step1 AS (
+      SELECT a.*,
+           CASE 
+              -- add Digital ABM, Intent Lead, Content Syndication as a channel as well as a tactic.
+              WHEN sfdc_campaign_type in ('Digital ABM', 'Intent Leads', 'Content Syndication') then sfdc_campaign_type
+              WHEN utm_medium = 'sem' THEN 'Paid Search'
+              WHEN utm_medium = 'search' THEN 'Paid Search'
+              WHEN utm_medium = 'paidsocial' THEN 'Paid Social'
+              WHEN utm_medium = 'display' THEN 'Display'
+              WHEN utm_medium  = 'gmail' AND utm_campaign LIKE 'ch.gmail%' THEN 'Display'
+              -- adding Email Nurture and Campaigns Nurture as channels 
+              WHEN utm_medium = 'nurtureemail' and utm_campaign like 'tm.lifecycle%' then 'Nurture - Lifecycle' 
+              WHEN utm_medium = 'nurtureemail' and (utm_campaign like 'tm.global-campaigns%' 
+                                                    or utm_campaign like 'tm.campaigns%') then 'Nurture - Global Campaigns'
+              -- to identify enterprise campaigns ryt and tco
+              WHEN utm_medium = 'email' and (lower(utm_campaign) like '%transform-your-business%' 
+                                            or lower(utm_campaign) like '%reduce-your-tco%') then 'Nurture - Global Campaigns'
+              -- identify vertical nurtures 
+              WHEN lower(utm_campaign) like '%finserv-then-and-now%' OR 
+                lower(utm_campaign) like '%ventana-research-finserv%' OR 
+                lower(utm_campaign) like '%kafka-summit-2020-keynote-finserv%' OR 
+                lower(utm_campaign) like '%idc-spotlight-on-modern-data-management-finserv%' OR 
+                lower(utm_campaign) like '%idc60-exec-snapshot-report-finserv%' OR 
+                lower(utm_campaign) like '%apache-kafka-and-google-cloud-finserv-ebook%' OR 
+                lower(utm_campaign) like '%ongoing-disruption-of-insurance%' OR 
+                lower(utm_campaign) like '%ventana-research-insurance%' OR 
+                lower(utm_campaign) like '%kafka-summit-2020-generali-insurance%' OR 
+                lower(utm_campaign) like '%idc-spotlight-on-modern-data-management-insurance%' OR 
+                lower(utm_campaign) like '%idc60-exec-snapshot-report-insurance%22%' OR 
+                lower(utm_campaign) like '%apache-kafka-and-google-cloud-insurance-ebook%' OR 
+                lower(utm_campaign) like '%ongoing-disruption-of-retail%' OR 
+                lower(utm_campaign) like '%ventana-research-retail%' OR 
+                lower(utm_campaign) like '%kafka-summit-2020-keynote-retail%' OR 
+                lower(utm_campaign) like '%idc-spotlight-on-modern-data-management-retail%' OR 
+                lower(utm_campaign) like '%idc60-exec-snapshot-report-retail%' OR 
+                lower(utm_campaign) like '%apache-kafka-and-google-cloud-retail-ebook%' then 'Nurture - Global Campaigns'
+              ELSE 'Organic' END AS channel,
+          CASE
+              WHEN c.team__c  = 'Partner'
+                  THEN 'Partner Marketing'
+              WHEN c.team__c  = 'Global Campaigns'
+                  THEN 'Global Campaigns'
+              WHEN c.team__c = 'Strategic Events'
+                  THEN 'Strategic Events'
+              WHEN c.team__c  = 'Growth - Lifecycle'
+                  THEN 'Lifecycle Marketing'
+              WHEN c.team__c  = 'Field Marketing'
+                  THEN 'Field Marketing'
+              WHEN c.team__c  = 'Growth - Digital' AND c.campaign_type_v2__c LIKE '%Paid%'
+                  THEN 'Paid Media'
+              WHEN LOWER(c.campaign_type_v2__c) LIKE '%email%'
+                  THEN 'Email Marketing'
+              WHEN c.campaign_type_v2__c IN ('Online Collateral',
+                                              'Contact Us',
+                                              'Newsletter',
+                                              'Confluent Platform Download',
+                                              'Website Chat',
+                                              'Request a Quote',
+                                              'Recorded Video',
+                                              'Confluent Community Download',
+                                              'Webinar - Recorded',
+                                              'Confluent Cloud Sign-Up')
+                  THEN 'Owned Media'
+              ELSE 'Other Marketing Sourced' END AS marketing_group,
+          CASE WHEN c.name IN (
+                          '2017.Q2 - Global - WE - WP Optimizing Your Apache Kafka Deployment',
+                          '2018.Q1 - Global - WP Monitoring Your Apache Kafka Deployment',
+                          '2018.Q2 - Global - WE - WP Stream Processing Made Easy With Confluent Cloud and',
+                          '2019.Q3 - Global - WE - WP RBAC for Kafka Connect',
+                          '2019.Q4 - Global - WE - WP - Kafka Serialization and Deserialization Examples',
+                          'WP 2017.08.31 Disaster Recovery for Multi-Datacenter Apache Kafka Deployments'
+          ) THEN 1 ELSE 0 END AS has_devx_content,
+          CASE WHEN c.name IN (
+                        '2017.Q2 - Global - WE - WP Optimizing Your Apache Kafka Deployment',
+                        '2018.Q1 - Global - WP Monitoring Your Apache Kafka Deployment',
+                        '2018.Q2 - Global - WE - WP Stream Processing Made Easy With Confluent Cloud and',
+                        '2019.Q3 - Global - WE - WP RBAC for Kafka Connect',
+                        '2019.Q4 - Global - WE - WP - Kafka Serialization and Deserialization Examples',
+                        'WP 2017.08.31 Disaster Recovery for Multi-Datacenter Apache Kafka Deployments'
+          ) THEN c.name ELSE null END AS web_content,
+
+          CASE WHEN c.campaign_type_v2__c = 'Kafka Summit' THEN 'Web'
+               WHEN c.format__c = 'Virtual' then 'Web'
+               WHEN c.format__c = 'In Person' THEN  'Non-Web'
+               WHEN c.format__c = 'Hybrid' THEN  'Web'
+               WHEN c.campaign_type_v2__c in ('Online Collateral',
+                                       'Webinar - Live',
+                                       'Confluent Platform Download',
+                                       'Confluent Cloud Sign-Up',
+                                       'Webinar - Recorded',
+                                       'Website Chat',
+                                       'Newsletter',
+                                       'Contact Us',
+                                       'Content Syndication',
+                                       'Confluent Community Download',
+                                       'Request a Quote',
+                                       'Recorded Video',
+                                       'Paid Search',
+                                       'Display',
+                                       'Paid Social',
+                                       'Kafka Summit') THEN 'Web'
+             WHEN c.campaign_type_v2__c in ('Tradeshow',
+                                       'Targeted Activity at Key Event',
+                                       'Confluent Streaming Event',
+                                       'Confluent Data in Motion Tour',
+                                       'Roundtable',
+                                       'Community'
+                                       ) THEN 'Non-Web'
+          ELSE 'Other'
+          END AS web_type,
+          c.tactic,
+
+FROM contact_opportunity_addition a
+LEFT JOIN fnd_sfdc.campaign c on c.id = a.campaign_id
+WHERE ((not sfdc_campaign_type = 'Telemarketing') and
+        (not sfdc_campaign_type = 'Sales - Outbound Prospecting') and
+        (not sfdc_campaign_type = 'SDR - Outbound Prospecting') and
+        (not sfdc_campaign_type = 'Training') and
+        (not sfdc_campaign_type = 'Telemarketing') and
+        (not sfdc_campaign_type = 'Other') and
+        (not sfdc_campaign_type = 'List Buy') and
+        (not sfdc_campaign_type = 'Partner') and
+        (not sfdc_campaign_type = 'Legal') and
+        (not sfdc_campaign_type = 'Marketing - DO NOT ATTRIBUTE') and
+        (not campaign_name like 'FCI%') and
+        (not sfdc_campaign_type = 'digital touch') and
+        (NOT sfdc_campaign_type = 'Email') and 
+        -- removing campaigns nurture and email nurture from being considered as tactics, 
+        -- considering them as channels instead
+        (NOT sfdc_campaign_type = 'Email Nurture') and 
+        (NOT sfdc_campaign_type = 'Campaigns Nurture') and
+        (NOT sfdc_campaign_type = 'Ungated Content') and
+        -- removing any kafka summit individual campaign
+        (c.id not in (select distinct id from kafka_ind_sessions_exclude)) )
+    and a.inquiry_id = '00v3a00001IxOPsAAN'
+
+)
+,web_visit AS (
+      SELECT interaction_time AS visit_time,
+              sfdc_lead_id,
+              campaign_name,
+              source,
+              medium,
+              has_devx_content,
+              CASE WHEN channel = 'gmail' and marketing_group = 'Paid Media' then 'Paid Email'
+                    WHEN channel = 'Search Engine Marketing' then 'Paid Search'
+              ELSE channel END AS channel,
+              marketing_group,
+              tactic
+      FROM rpt_attribution.touchpoints_step2
+      WHERE (sfdc_campaign_type in ('Email', 'digital touch') OR channel = 'Email')
+        and sfdc_lead_id = '00Q3a00000viKFCEA2'
+)
+
+,web_visit_match AS (
+        SELECT
+               i.inquiry_id,
+               i.lead_or_contact_id,
+               i.interaction_time,
+               wv.visit_time,
+               wv.campaign_name AS web_channel_campaign,
+               wv.source AS web_channel_source,
+               wv.marketing_group AS web_channel_marketing_group,
+               wv.channel AS web_channel,
+               wv.medium AS web_channel_medium,
+               wv.tactic AS web_channel_tactic,
+               wv.has_devx_content as web_channel_devx,
+               timestamp_diff(interaction_time, visit_time, minute) as min_diff
+         FROM step1 i
+         JOIN web_visit wv on wv.sfdc_lead_id = i.lead_or_contact_id
+         WHERE i.interaction_time > wv.visit_time
+ )
+
+, match_logic1 AS (
+        SELECT *,
+                row_number() OVER (PARTITION BY inquiry_id ORDER BY min_diff) AS rank
+        FROM web_visit_match
+)
+
+,match_logic2 AS (
+        SELECT DISTINCT
+             *
+        FROM match_logic1
+        WHERE rank = 1 AND min_diff <= 360
+)
+
+, match_logic3 AS (
+
+SELECT i.* except(channel),
+       CASE WHEN channel <> 'Organic' THEN channel
+            WHEN channel = 'Organic' AND web_channel = 'Other' THEN web_channel_tactic
+            WHEN channel = 'Organic' AND web_channel IS NOT NULL THEN web_channel
+            WHEN channel = 'Organic' AND web_channel IS NULL THEN 'Organic' -- TODO: further break down into organic web (seo/direct) and organic
+            ELSE 'Other' END as channel,
+      --Remove old tactic logi and used one directly from fnd_sfdc.campaign table
+       -- CASE WHEN sfdc_campaign_type like 'Webinar%' then 'Webinar'
+       --      WHEN sfdc_campaign_type = 'Display'  then 'Paid Media'
+       --      WHEN sfdc_campaign_type = 'Forum' or sfdc_campaign_type = 'Confab' then 'Forum'
+       --      WHEN sfdc_campaign_type IN ('Confluent Streaming Event',
+       --                                      'Workshop',
+       --                                      'Roundtable',
+       --                                      'Kafka Summit',
+       --                                      'Tradeshow',
+       --                                      'Conference',
+       --                                      'Tech Talk',
+       --                                      'Targeted Activity at Key Event',
+       --                                      'Confluent Cloud Sign-Up',
+       --                                      'Regional Online Talk',
+       --                                      'Online Collateral',
+       --                                      'PG Blitz',
+       --                                      'Confluent Platform Download',
+       --                                      'Website Chat') then sfdc_campaign_type
+       --      WHEN sfdc_campaign_type IN ('Request a Quote', 'Contact Us') then 'Contact Us'
+       --      WHEN sfdc_campaign_type = 'Field Event' or channel = 'Live Event' then 'Other Event'
+       --      ELSE 'Other' END AS tactic,
+        CASE WHEN campaign_name LIKE '%enterprise-tal%' THEN 1
+               WHEN marketing_group = 'Global Campaigns' THEN 1
+        ELSE 0 END AS is_global_campaign,
+        web_channel_campaign,
+        web_channel_source,
+        web_channel_marketing_group,
+        web_channel,
+        web_channel_medium,
+        web_channel_tactic,
+         web_channel_devx,
+        min_diff
+FROM step1 i
+LEFT JOIN match_logic2 m ON i.inquiry_id = m.inquiry_id AND i.interaction_time = m.interaction_time
+
+)
+,match_logic4 AS (
+
+SELECT a.channel,a.*,
+      case when a.tactic = 'Confluent Cloud Sign-Up' and a.campaign_team = 'Partner' then 'Partner Cloud Signup'
+            when a.tactic = 'Confluent Cloud Sign-Up' then 'Growth Cloud Signup'
+            when a.tactic = 'Webinar' and a.campaign_team = 'Partner' then 'Partner Webinar'
+            when a.tactic = 'Webinar' and a.campaign_team = 'Field Marketing' then 'FM Total'
+            when a.tactic = 'Webinar' then 'Growth Webinar'
+            when a.tactic = 'Kafka Summit' then 'Kafka Summit' 
+            when a.tactic = 'Paid Media' then 'Online Collateral and Other Web'
+            when a.campaign_team = 'Strategic Events' then 'Other Strategic Event' 
+            when a.tactic = 'Forum' then 'FM Total'
+            when a.tactic = 'Tech Talk' then 'FM Total'
+            when a.campaign_team = 'Field Marketing' then 'FM Total'
+            when a.campaign_team = 'Global Campaigns' then 'Global Campaigns'
+            when a.campaign_team = 'Partner' and a.tactic = 'Online Collateral' then 'Partner Online Collateral'
+            when a.campaign_team = 'Partner' then 'Other Partner Marketing'
+            else 'Online Collateral and Other Web' end as tactic_grouping,
+            
+       case when a.tactic = 'Confluent Cloud Sign-Up' and a.campaign_team = 'Partner' then 'Partner Marketing'
+            when a.tactic = 'Confluent Cloud Sign-Up' then 'Growth'
+            when a.campaign_team = 'Field Marketing' then 'GRM'
+            when a.campaign_team = 'Global Campaigns' then 'GRM'
+            when a.campaign_team = 'Revenue Marketing Cloud Partner' then 'GRM'
+            when a.campaign_team = 'Strategic Events' then 'GRM'
+            when a.tactic = 'Webinar' and a.campaign_team = 'Partner' then 'Partner Marketing'
+            when a.tactic = 'Webinar' and a.campaign_team = 'Field Marketing' then 'GRM'
+            when a.tactic = 'Webinar' then 'Growth'
+            when a.tactic = 'Kafka Summit' then 'GRM'
+            when a.tactic = 'Paid Media' then 'Growth'
+            when a.tactic = 'Forum' then 'GRM'
+            when a.tactic = 'Tech Talk' then 'GRM'
+            when a.campaign_team = 'Field Marketing' then 'GRM'
+            when a.campaign_team = 'Global Campaigns' then 'GRM'
+            when a.campaign_team = 'Partner' and a.tactic = 'Online Collateral' then 'Partner Marketing'
+            when a.campaign_team = 'Partner' then 'Partner Marketing'
+            else 'Growth' end as tactic_team,
+      CASE    WHEN tactic in ('Tech Talk', 
+                              'Tradeshow', 
+                              'Forum', 
+                              'Targeted Activity at Key Event',
+                              'Confluent Streaming Event',
+                              'Confluent Data in Motion Tour',
+                             -- 'Workshop',
+                              'Other Event',
+                              -- adding Digital ABM, Intent Leads and Content Syndication as channels 
+                              'Digital ABM', 'Intent Leads', 'Content Syndication'
+                              ) THEN tactic
+              WHEN tactic = 'Kafka Summit' AND  NOT (campaign_name LIKE '%2020%' OR campaign_name LIKE '%2021%') THEN tactic
+              WHEN tactic = 'Workshop' AND interaction_date < '2020-04-01' THEN tactic
+              WHEN utm_medium = 'paidsocial' THEN 'Paid Social'
+              WHEN utm_medium = 'display' THEN 'Display'
+              WHEN utm_medium = 'ppc' THEN 'Paid Search'
+              WHEN utm_medium = 'sem' THEN 'Paid Search'
+              WHEN utm_medium = 'gmail' THEN 'Paid Gmail'
+              -- appending lifecycle and global email nurtures
+              WHEN utm_medium = 'nurtureemail' and (utm_campaign like 'tm.lifecycle%' OR 
+                                                    web_channel_campaign like 'tm.lifecycle%')
+                                                    THEN 'Nurture - Lifecycle'
+              WHEN utm_medium = 'nurtureemail' and (utm_campaign like 'tm.global-campaigns%' OR
+                                                    utm_campaign like 'tm.campaigns%' OR
+                                                    web_channel_campaign like 'tm.global-campaigns%' OR
+                                                    web_channel_campaign like 'tm.campaigns%'                                           
+                                                    ) THEN 'Nurture - Global Campaigns'
+              WHEN lower(utm_campaign) like '%transform-your-business%' OR
+                   lower(utm_campaign) like '%reduce-your-tco%' THEN 'Nurture - Global Campaigns'
+                -- identify vertical nurtures 
+              WHEN lower(utm_campaign) like '%finserv-then-and-now%' OR 
+                    lower(utm_campaign) like '%ventana-research-finserv%' OR 
+                    lower(utm_campaign) like '%kafka-summit-2020-keynote-finserv%' OR 
+                    lower(utm_campaign) like '%idc-spotlight-on-modern-data-management-finserv%' OR 
+                    lower(utm_campaign) like '%idc60-exec-snapshot-report-finserv%' OR 
+                    lower(utm_campaign) like '%apache-kafka-and-google-cloud-finserv-ebook%' OR 
+                    lower(utm_campaign) like '%ongoing-disruption-of-insurance%' OR 
+                    lower(utm_campaign) like '%ventana-research-insurance%' OR 
+                    lower(utm_campaign) like '%kafka-summit-2020-generali-insurance%' OR 
+                    lower(utm_campaign) like '%idc-spotlight-on-modern-data-management-insurance%' OR 
+                    lower(utm_campaign) like '%idc60-exec-snapshot-report-insurance%22%' OR 
+                    lower(utm_campaign) like '%apache-kafka-and-google-cloud-insurance-ebook%' OR 
+                    lower(utm_campaign) like '%ongoing-disruption-of-retail%' OR 
+                    lower(utm_campaign) like '%ventana-research-retail%' OR 
+                    lower(utm_campaign) like '%kafka-summit-2020-keynote-retail%' OR 
+                    lower(utm_campaign) like '%idc-spotlight-on-modern-data-management-retail%' OR 
+                    lower(utm_campaign) like '%idc60-exec-snapshot-report-retail%' OR 
+                    lower(utm_campaign) like '%apache-kafka-and-google-cloud-retail-ebook%' THEN 'Nurture - Global Campaigns'
+              WHEN utm_medium LIKE '%email%' THEN 'Email'
+              WHEN utm_source IN ('gcp', 'aws', 'azure') THEN 'Partner Referral'
+              WHEN utm_source IN ('webiste', 'confluent.cloud') THEN 'Confluent website'
+              WHEN utm_campaign LIKE '%type.community%' THEN 'DevX Referral' 
+              WHEN utm_campaign LIKE '%tm.devx%' THEN 'DevX Referral' 
+              WHEN utm_campaign LIKE '%tech-tip.community%' THEN 'DevX Referral' 
+              WHEN utm_campaign IN 
+              ('ch.client-wont-connect-to-kafka-cluster-in-docker-aws-brothers-laptop.community_content.clients',
+               'ch.stream-processing-with-iot-data.community_content.stream-processing',
+               'ch.kafka-summit-2020-day-1-recap_content.kafka-summit',
+               'ch.mongodb-atlas-connector-in-secure-environments_content.connecting-to-apache-kafka',
+               'ch.bounding-ksqldb-memory-usage_content.stream-processing'
+                ) THEN 'DevX Referral' 
+              WHEN a.web_channel in ( 'Email', 
+                                      'Display',
+                                      'Direct', 
+                                      'Direct', 
+                                      'Confluent website', 
+                                      'Organic Social',
+                                      'Organic Video',
+                                      'Paid Social',
+                                      'Paid Search'
+                                      ) THEN a.web_channel
+              WHEN web_channel_campaign LIKE '%type.community%' THEN 'DevX Referral' 
+              WHEN web_channel_campaign LIKE '%tm.devx%' THEN 'DevX Referral' 
+              WHEN web_channel_campaign LIKE '%tech-tip.community%' THEN 'DevX Referral' 
+              WHEN web_channel_campaign IN 
+              ('ch.client-wont-connect-to-kafka-cluster-in-docker-aws-brothers-laptop.community_content.clients',
+               'ch.stream-processing-with-iot-data.community_content.stream-processing',
+               'ch.kafka-summit-2020-day-1-recap_content.kafka-summit',
+               'ch.mongodb-atlas-connector-in-secure-environments_content.connecting-to-apache-kafka',
+               'ch.bounding-ksqldb-memory-usage_content.stream-processing'
+                ) THEN 'DevX Referral' 
+              WHEN a.web_channel = 'Paid Email' THEN 'Paid Gmail'
+              WHEN a.web_channel = 'Partner referral' THEN 'Partner Referral'
+              WHEN a.web_channel = 'Other' AND a.web_channel_medium = 'email' THEN 'Email'
+              WHEN a.web_channel = 'Other' AND a.web_channel_medium = 'referral' THEN 'Other Referral'
+              WHEN a.web_channel = 'Other' AND a.web_channel_source = 'webiste' THEN 'Confluent website'
+              WHEN a.web_channel_source IS NULL THEN 'No Referral'  
+              ELSE 'Organic Web' END AS channel_detail,
+
+
+FROM match_logic3 a
+)
+
+SELECT a.* except(channel),
+      CASE WHEN channel_detail = 'Paid Gmail' THEN 'Display'
+           WHEN channel_detail = 'No Referral'  THEN 'No Referral' 
+           WHEN channel_detail LIKE '%Referral' THEN 'Referral'
+           WHEN channel_detail = 'Other Referral' THEN 'Referral'
+      ELSE channel_detail END AS channel,
+      CASE WHEN channel_detail LIKE '%Paid%'  OR channel_detail in ('Display') THEN 'Paid Media'
+           -- adding channel detail for Nurture Lifecycle & Global Campaigns
+           WHEN channel_detail LIKE 'Nurture%' THEN 'Nurture'
+           WHEN channel_detail IN ('Organic Web', 
+                                    'Direct', 
+                                    'Email', 
+                                    'Other Referral',
+                                    'Organic Social',
+                                    'Confluent website',
+                                    'DevX Referral',
+                                    'Partner Referral',
+                                    'Organic Video') THEN 'Non Paid Web'
+           ELSE channel_detail END AS channel_aggregate
+FROM match_logic4 a
+---------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------
+
+select distinct channel
+from `datascience-222717.rpt_marketing.paid_media_summary` 
+where channel_type = 'sem' and week = '2022-01-16' 
+
+select channel, count(*)
+from `datascience-222717.rpt_marketing.paid_media_summary` 
+where channel_type = 'sem'  and week = '2022-01-16'
+group by 1
+
+select channel,day, count(*)
+from `datascience-222717.rpt_marketing.paid_media_summary` 
+where channel_type = 'sem'  and week = '2022-01-16'
+group by 1,2
+order by 2,1
+
+-----
+
+
+select * from `data-sandbox-123.Workspace_Ashwini.inbound_lead_funnel_feb11` 
+where mapping_channel_type = 'sem'
+ 
+select * 
+from `data-sandbox-123.Workspace_Ashwini.inbound_lead_funnel_feb11` 
+where mapping_channel_type = 'sem' 
+    and inquiry_date >= '2022-01-16'and inquiry_date <= '2022-01-22'
+596
+
+select count(inquiry_date), sum(leads_or_contacts_created) 
+from `data-sandbox-123.Workspace_Ashwini.inbound_lead_funnel_feb11` 
+where mapping_channel_type = 'sem' 
+    and inquiry_date >= '2022-01-16'and inquiry_date <= '2022-01-22'
+
+select  mapping_channel, count(*), sum(leads_or_contacts_created) 
+from `data-sandbox-123.Workspace_Ashwini.inbound_lead_funnel_feb11` 
+where mapping_channel_type = 'sem' 
+    and inquiry_date >= '2022-01-16'and inquiry_date <= '2022-01-22'
+group by 1 
+
+select mapping_channel, mapping_channel_type, inquiry_date, count(*), sum(leads_or_contacts_created) 
+from `data-sandbox-123.Workspace_Ashwini.inbound_lead_funnel_feb11` 
+where mapping_channel_type = 'sem' 
+    and inquiry_date >= '2022-01-16'and inquiry_date <= '2022-01-22'
+group by 1 ,2 ,3
+
+--check this later
+select mapping_channel, mapping_channel_type, utm_campaign, inquiry_date, count(*), sum(leads_or_contacts_created) 
+from `data-sandbox-123.Workspace_Ashwini.inbound_lead_funnel_feb11` 
+where mapping_channel_type = 'sem' 
+    and inquiry_date >= '2022-01-16'and inquiry_date <= '2022-01-22'
+group by 1 ,2 ,3,4
+order by 4,3,2,1
+
+select --t1.channel, t1.channel_type --,t1.adgroup
+         --   , t1.day, count(*),
+             sum(leads_or_contacts_created) sum_leads_created
+from ( 
+    select t1.channel, t1.channel_type,t1.adgroup, t1.day,leads_or_contacts_created-- count(*), sum(leads_or_contacts_created) 
+    from `datascience-222717.rpt_marketing.paid_media_summary` t1
+        left join `data-sandbox-123.Workspace_Ashwini.inbound_lead_funnel_feb11`  t3 
+                                on    t1.day = t3.inquiry_date 
+                                  and lower(t1.channel_type) = lower(t3.mapping_channel_type) 
+                                  and lower(t1.channel) = lower(t3.mapping_channel) 
+                                  and t1.adgroup = t3.utm_campaign
+) t1 
+where channel_type = 'sem'
+    and day >= '2022-01-16'and day <= '2022-01-22'
+group by 1,2,3
+order by 3,2,1
+
+
+select inquiry_date,mapping_channel_type,mapping_channel, utm_campaign, leads_or_contacts_created  
+from   `data-sandbox-123.Workspace_Ashwini.inbound_lead_funnel_feb11` 
+where inquiry_date = '2022-01-19' and mapping_channel_type = 'sem' and mapping_channel = 'bing'
+
+
+
+SELECT * FROM `datascience-222717.rpt_leads_pipeline.inbound_lead_funnel`
+where  inq_channel_agg = 'Paid Media'
+        and inquiry_created_date_utc = '2022-01-19' 
+    inquiry_created_date_utc >= '2022-01-16'and  inquiry_created_date_utc <= '2022-01-22'
+
+SELECT inq_channel_agg,count(*)
+FROM `datascience-222717.rpt_leads_pipeline.inbound_lead_funnel`
+where -- inq_channel_agg = 'Paid Media' and
+       -- and inquiry_created_date_utc = '2022-01-19' 
+        inquiry_created_date_utc >= '2022-01-16'and  inquiry_created_date_utc <= '2022-01-22'
+group by 1 order by 1
+
+SELECT  count(*)
+FROM `datascience-222717.rpt_leads_pipeline.inbound_lead_funnel`
+where  --inq_channel_agg = 'Paid Media' and
+       -- and inquiry_created_date_utc = '2022-01-19' 
+        inquiry_created_date_utc >= '2022-01-16'and  inquiry_created_date_utc <= '2022-01-22'
+
+SELECT campaign_member_id,inq_channel_agg,*
+FROM `datascience-222717.rpt_leads_pipeline.inbound_lead_funnel`
+where  inq_channel_agg = 'Paid Media' and
+          inquiry_created_date_utc = '2022-01-19' 
+       -- inquiry_created_date_utc >= '2022-01-16'and  inquiry_created_date_utc <= '2022-01-22'
+order by 1
+
+---***
+
+
+select * from `datascience-222717.rpt_marketing.inquiry`
+where created_ts >= '2022-01-16' and created_ts <= '2022-01-22'
+
+
+select region, count(*)
+from `datascience-222717.rpt_marketing.inquiry` i 
+where created_ts >= '2022-01-16' and created_ts <= '2022-01-22'
+group by 1
+order by 1
+
+
+
+
+---------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------
+select distinct channel
+from `datascience-222717.rpt_marketing.paid_media_summary` 
+where channel_type = 'sem' and week = '2022-01-16' 
+
+select channel, count(*)
+from `datascience-222717.rpt_marketing.paid_media_summary` 
+where channel_type = 'sem'  and week = '2022-01-16'
+group by 1
+
+select channel,day, count(*)
+from `datascience-222717.rpt_marketing.paid_media_summary` 
+where channel_type = 'sem'  and week = '2022-01-16'
+group by 1,2
+order by 2,1
+
+-----
+
+
+select * from `data-sandbox-123.Workspace_Ashwini.inbound_lead_funnel_feb11` 
+where mapping_channel_type = 'sem'
+ 
+select * 
+from `data-sandbox-123.Workspace_Ashwini.inbound_lead_funnel_feb15` 
+where mapping_channel_type = 'sem' 
+    and inquiry_date >= '2022-01-16'and inquiry_date <= '2022-01-22'
+596
+
+select count(inquiry_date), sum(leads_or_contacts_created) 
+from `data-sandbox-123.Workspace_Ashwini.inbound_lead_funnel_feb15` 
+where mapping_channel_type = 'sem' 
+    and inquiry_date >= '2022-01-16'and inquiry_date <= '2022-01-22'
+
+select  mapping_channel, count(*), sum(leads_or_contacts_created) 
+from `data-sandbox-123.Workspace_Ashwini.inbound_lead_funnel_feb11` 
+where mapping_channel_type = 'sem' 
+    and inquiry_date >= '2022-01-16'and inquiry_date <= '2022-01-22'
+group by 1 
+
+select mapping_channel, mapping_channel_type, inquiry_date, count(*), sum(leads_or_contacts_created) 
+from `data-sandbox-123.Workspace_Ashwini.inbound_lead_funnel_feb11` 
+where mapping_channel_type = 'sem' 
+    and inquiry_date >= '2022-01-16'and inquiry_date <= '2022-01-22'
+group by 1 ,2 ,3
+
+--check this later
+select mapping_channel, mapping_channel_type, utm_campaign, inquiry_date, count(*), sum(leads_or_contacts_created) 
+from `data-sandbox-123.Workspace_Ashwini.inbound_lead_funnel_feb11` 
+where mapping_channel_type = 'sem' 
+    and inquiry_date >= '2022-01-16'and inquiry_date <= '2022-01-22'
+group by 1 ,2 ,3,4
+order by 4,3,2,1
+
+select --t1.channel, t1.channel_type --,t1.adgroup
+         --   , t1.day, count(*),
+             sum(leads_or_contacts_created) sum_leads_created
+from ( 
+    select t1.channel, t1.channel_type,t1.adgroup, t1.day,leads_or_contacts_created-- count(*), sum(leads_or_contacts_created) 
+    from `datascience-222717.rpt_marketing.paid_media_summary` t1
+        left join `data-sandbox-123.Workspace_Ashwini.inbound_lead_funnel_feb15`  t3 
+                                on    t1.day = t3.inquiry_date 
+                                  and lower(t1.channel_type) = lower(t3.mapping_channel_type) 
+                                  and lower(t1.channel) = lower(t3.mapping_channel) 
+                                  and t1.adgroup = t3.utm_campaign
+) t1 
+where channel_type = 'sem'
+    and day >= '2022-01-16'and day <= '2022-01-22'
+group by 1,2,3
+order by 3,2,1
+
+
+select inquiry_date,mapping_channel_type,mapping_channel, utm_campaign, leads_or_contacts_created  
+from   `data-sandbox-123.Workspace_Ashwini.inbound_lead_funnel_feb11` 
+where inquiry_date = '2022-01-19' and mapping_channel_type = 'sem' and mapping_channel = 'bing'
+
+
+--IMPORTANT QUERY 
+SELECT * FROM `datascience-222717.rpt_leads_pipeline.inbound_lead_funnel`
+where  inq_channel_agg = 'Paid Media'
+        and inquiry_created_date_utc = '2022-01-19' 
+  --  inquiry_created_date_utc >= '2022-01-16'and  inquiry_created_date_utc <= '2022-01-22'
+order by 2
+
+--create table Workspace_Ashwini.campaign_member_ids_fromInboundLeadFunnelFeb15Feb11comparison as
+SELECT * FROM `datascience-222717.rpt_leads_pipeline.inbound_lead_funnel`
+where  inq_channel_agg = 'Paid Media'
+        and inquiry_created_date_utc = '2022-01-19' 
+        and campaign_member_id not in 
+(SELECT distinct campaign_member_id 
+FROM `data-sandbox-123.Workspace_Ashwini.rpt_leads_pipeline_inbound_lead_funnel_feb11` 
+where  inq_channel_agg = 'Paid Media'
+        and inquiry_created_date_utc = '2022-01-19' 
+)
+
+select inq_channel_agg,* 
+FROM `data-sandbox-123.Workspace_Ashwini.rpt_leads_pipeline_inbound_lead_funnel_feb11` 
+where campaign_member_id = '00v3a00001IxQHHAA3'
+
+select inq_channel_agg,* 
+FROM `data-sandbox-123.Workspace_Ashwini.rpt_leads_pipeline_inbound_lead_funnel_feb11` 
+where campaign_member_id  in (select distinct campaign_member_id from Workspace_Ashwini.campaign_member_ids_fromInboundLeadFunnelFeb15Feb11comparison)
+
+-- we're checking why the inquiry was labelled 'Paid Media' before and it is 'Non Paid Web' today
+select 	channel_aggregate,* 
+from `data-sandbox-123.Workspace_Ashwini.rpt_new_pg_attribution_new_pg_attribution_step2_feb15`
+where inquiry_id = '00v3a00001IxOPsAAN'
+
+SELECT inq_channel_agg,count(*)
+FROM `datascience-222717.rpt_leads_pipeline.inbound_lead_funnel`
+where -- inq_channel_agg = 'Paid Media' and
+       -- and inquiry_created_date_utc = '2022-01-19' 
+        inquiry_created_date_utc >= '2022-01-16'and  inquiry_created_date_utc <= '2022-01-22'
+group by 1 order by 1
+
+SELECT  count(*)
+FROM `datascience-222717.rpt_leads_pipeline.inbound_lead_funnel`
+where  --inq_channel_agg = 'Paid Media' and
+       -- and inquiry_created_date_utc = '2022-01-19' 
+        inquiry_created_date_utc >= '2022-01-16'and  inquiry_created_date_utc <= '2022-01-22'
+
+SELECT campaign_member_id,inq_channel_agg,*
+FROM `datascience-222717.rpt_leads_pipeline.inbound_lead_funnel`
+where  inq_channel_agg = 'Paid Media' and
+          inquiry_created_date_utc = '2022-01-19' 
+       -- inquiry_created_date_utc >= '2022-01-16'and  inquiry_created_date_utc <= '2022-01-22'
+order by 1
+
+---***
+
+select * from `datascience-222717.rpt_marketing.paid_media_performance_v2`
+where inquiry_id= '00v3a00001IxOPsAAN'
+
+select inq_channel_agg,created_ts,* from `data-sandbox-123.Workspace_Ashwini.rrpt_leads_pipeline_inbound_lead_funnel_feb15`
+where inquiry_id= '00v3a00001IxOPsAAN'
+
+select inq_channel_agg,created_ts,* from `datascience-222717.rpt_leads_pipeline.inbound_lead_funnel`
+where inquiry_id= '00v3a00001IxOPsAAN'
+
+select * from `datascience-222717.rpt_new_pg_attribution.new_pg_attribution_step2`
+where inquiry_id = '00v3a00001IxOPsAAN'
+
+
+select * from `datascience-222717.rpt_marketing.inquiry`
+where created_ts >= '2022-01-16' and created_ts <= '2022-01-22'
+
+
+select region, count(*)
+from `datascience-222717.rpt_marketing.inquiry` i 
+where created_ts >= '2022-01-16' and created_ts <= '2022-01-22'
+group by 1
+order by 1
+
+
+
+
+
+
+---------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------
+
+
+
+
+---------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------
+
+
+
+---------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------
+
+
+
+
