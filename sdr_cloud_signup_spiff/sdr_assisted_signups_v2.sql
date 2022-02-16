@@ -5,7 +5,7 @@
 -- we will have to include a history table(although this request is not presently there)
 
 
---CREATE OR REPLACE TABLE sdr_cloud_signup_spiff.rpt_sdr_assisted_signups_v2  AS -- will make changes to table name later
+--CREATE OR REPLACE TABLE sdr_cloud_signup_spiff.rpt_sdr_assisted_signups_v2  AS -- will make changes to table name later 
 
 WITH signup_leads AS (
   SELECT *
