@@ -5,6 +5,7 @@
      select a.*, b.org_id   --here we are mapping lead to org_id
     from `datascience-222717.dwh_web.rpt_web_dashboard`a  
         left join (select distinct org_id, lead_or_contact_id from `data-sandbox-123.Workspace_Ashwini.org_to_lead_map_apr01` ) b
+           --code for lead to org_id map: https://console.cloud.google.com/bigquery?sq=691709282767:d4b093b92b6e422f9530fb2f45f7da7f&project=datascience-222717
                              on a.lead_or_contact_id = b.lead_or_contact_id 
  )
   
